@@ -1,106 +1,139 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.98.0">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Alice&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.2/examples/album/">
+    <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}"> -->
 
-    {% if title %}
-        <title>Flask-блог - {{ title }}</title>
-    {% else %}
-        <title>Flask-блог</title>
-    {% endif %}
-
-    {% block head %} {% endblock head %}
+    <link href="../static/assets/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
-      body{
-        background-color: #e5e5e5;
-        margin-top: 6.5rem;
-      }
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
 
-      .navigation-links{
-        color: white !important;
-        font-weight: 500;
-        background-color: rgb(183, 214, 252);
-        border-radius: 5px;
-        border-bottom: 4px solid blue;
-        margin: 5px;
-        background-size: 200% 200%;
-        background-image: linear-gradient( transparent 50%, rgb(79, 128, 233) 50%);
-        transition: background-position 300ms, color 300ms ease, border-color 300ms ease;      
-      }
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
 
-      .navigation-links:hover{
-        color: white;
-        background-image: linear-gradient( transparent 50%, #3a86ff 50%);
-        background-position: 0% 100%;
-      }
+        .b-example-divider {
+            height: 3rem;
+            background-color: rgba(0, 0, 0, .1);
+            border: solid rgba(0, 0, 0, .15);
+            border-width: 1px 0;
+            box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+        }
 
-      .navbar{
-        background-color: #c6def1; 
-        box-shadow: 0px 1px 10px black;
-      }
+        .b-example-vr {
+            flex-shrink: 0;
+            width: 1.5rem;
+            height: 100vh;
+        }
 
-      .navbar .container{
-        margin-bottom: 0;
-      }
+        .bi {
+            vertical-align: -.125em;
+            fill: currentColor;
+        }
+
+        .nav-scroller {
+            position: relative;
+            z-index: 2;
+            height: 2.75rem;
+            overflow-y: hidden;
+        }
+
+        .nav-scroller .nav {
+            display: flex;
+            flex-wrap: nowrap;
+            padding-bottom: 1rem;
+            margin-top: -1px;
+            overflow-x: auto;
+            text-align: center;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
     </style>
 
-    
-  {% block style %} {% endblock style %}
+    <title>{{ title }}</title>
+
+    {% block style %}
+
+    {% endblock style %}
 </head>
 <body>
-    <header class="site-header">
-      <nav class="navbar navbar-expand-md navbar-dark fixed-top">
+
+<header>
+    <div class="collapse bg-dark" id="navbarHeader">
         <div class="container">
-          <a class="navbar-brand mr-4" href="/" style="color: rgb(7, 85, 173); font-family: 'Lobster', cursive; font-weight: 800; font-size: 30px;">Мой блог</a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          {% if current_user.is_authenticated %}
-            <h4>Привет, {{ current_user.username }}!</h4>
-          {% endif %}
-          <div class="collapse navbar-collapse" id="navbarToggle" style="justify-content: flex-end;">
-            <!-- Navbar Right Side -->
-
-          </div>
-        </div>
-      </nav>
-    </header>
-    
-    <main role="main" class="container">
-      <div class="row">
-        <div class="col-md-10">
-          {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-              {% for category, message in messages %}
-                <div class="alert alert-{{ category }}">
-                  {{ message }}
+            <div class="row">
+                <div class="col-sm-4 offset-md-1 py-4">
+                    <h4 class="text-white">Contact</h4>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white">Follow on Twitter</a></li>
+                        <li><a href="#" class="text-white">Like on Facebook</a></li>
+                        <li><a href="#" class="text-white">Email me</a></li>
+                    </ul>
                 </div>
-              {% endfor %}
-            {% endif %}
-          {% endwith %}
-          
-          {% block content %}{% endblock %}
+                <div class="col-sm-4 offset-md-1 py-4">
+                    <ul class="list-unstyled">
+                        {% if current_user.is_authenticated %}
+                            <li><a class="text-white" href="{{ url_for('users.account') }}">Profile</a></li>
+                            <li><a class="text-white" href="{{ url_for('users.logout') }}">Logout</a></li>
+                        {% else %}
+                            <li><a class="text-white" href="{{ url_for('users.login') }}">Login</a></li>
+                            <li><a class="text-white" href="{{ url_for('users.register') }}">Registration</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
         </div>
-      </div>
-    </main>
+    </div>
+    <div class="navbar navbar-dark bg-dark shadow-sm">
+        <div class="container">
+            <a href="#" class="navbar-brand d-flex align-items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor"
+                     stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="me-2"
+                     viewBox="0 0 24 24">
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                    <circle cx="12" cy="13" r="4"/>
+                </svg>
+                <strong>Web Blog</strong>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader"
+                    aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </div>
+</header>
+
+{% block content %}
+
+{% endblock %}
+
+<footer class="text-muted py-5">
+    <div class="container">
+        <p class="float-end mb-1">
+
+        </p>
+        <p class="mb-1">2022 &copy; Web Blog</p>
+    </div>
+</footer>
 
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="../static/assets/dist/js/bootstrap.bundle.min.js"></script>
+
+
 </body>
 </html>

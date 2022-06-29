@@ -1,5 +1,4 @@
 from datetime import datetime
-from web_blog import db
 from flask_login import UserMixin
 
 from web_blog import db, login_manager
