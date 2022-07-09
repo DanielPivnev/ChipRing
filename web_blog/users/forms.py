@@ -56,7 +56,7 @@ class LoginForm(FlaskForm):
                                  DataRequired()
                              ])
     remember = BooleanField('Напомнить пароль')
-    submit = SubmitField('Войти')
+    submit = SubmitField('Sign In')
 
 
 class UpdateAccountForm(FlaskForm):
@@ -99,7 +99,7 @@ class RequestResetForm(FlaskForm):
                             DataRequired(),
                             Email()
                         ])
-    submit = SubmitField('Изменить пароль')
+    submit = SubmitField('Change Password')
 
     @staticmethod
     def validate_email(self, email):
@@ -119,4 +119,4 @@ class ResetPasswordForm(FlaskForm):
                                          DataRequired(),
                                          EqualTo('password')
                                      ])
-    submit = SubmitField('Переустановить пароль')
+    submit = SubmitField('Save New Password')

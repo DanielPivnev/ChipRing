@@ -3,15 +3,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-    <meta name="generator" content="Hugo 0.98.0">
-    <title>Signin Template · Bootstrap v5.2</title>
+    <title>{{ title }}</title>
 
-    <link rel="canonical" href="https://getbootstrap.com/docs/5.2/examples/sign-in/">
-
-
-<!--    <link href="../static/assets/dist/css/bootstrap.min.css" rel="stylesheet">-->
+    <link href="{{ url_for('static', filename='assets/dist/css/bootstrap.min.css') }}" rel="stylesheet">
 
     <style>
         .bd-placeholder-img {
@@ -64,11 +58,15 @@
             white-space: nowrap;
             -webkit-overflow-scrolling: touch;
         }
+
+        .a {
+            margin-bottom: 20px;
+        }
     </style>
 
 
     <!-- Custom styles for this template -->
-<!--    <link href="../static/assets/signin.css" rel="stylesheet">-->
+    <link href="{{ url_for('static', filename='assets/signin.css') }}" rel="stylesheet">
 </head>
 <body class="text-center">
 
@@ -90,9 +88,10 @@
                 {% endfor %}
             {% endif %}
         <div class="form-floating">
-            {{ form.email(class='form-control') }}
+            {{ form.email(class='form-control a') }}
             {{ form.email.label() }}
         </div>
+
         {{ form.submit(class='w-100 btn btn-lg btn-dark') }}
         <p class="mt-5 mb-3 text-muted">&copy; 2022 Web Blog</p>
     </form>
