@@ -4,7 +4,7 @@ from flask_login import login_user, current_user, logout_user, login_required
 from web_blog import db, bcrypt
 from web_blog.models import User, Post
 from web_blog.users.forms import (RegistrationForm, LoginForm, UpdateAccountForm, RequestResetForm, ResetPasswordForm)
-from web_blog.users.utils import save_picture
+from web_blog.users.utils import save_picture, send_reset_email
 
 users = Blueprint('users', __name__)
 
@@ -12,17 +12,16 @@ users = Blueprint('users', __name__)
 @users.route('/registration', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
-        return redirect(url_for('main.home'))
+        return redirect(url_for('posts.home'))
     form = RegistrationForm()
     if form.validate_on_submit():
-        hashed_password = bcrypt.\
+        hashed_password = bcrypt. \
             generate_password_hash(form.password.data).decode('utf-8')
         user = User(username=form.username.data,
                     email=form.email.data, password=hashed_password)
         db.session.add(user)
         db.session.commit()
-        flash('Ваша учетная запись была создана!'
-              ' Теперь вы можете войти в систему', 'success')
+
         return redirect(url_for('users.login'))
     return render_template('registration.html', title='Registration', form=form)
 
@@ -30,7 +29,7 @@ def register():
 @users.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('main.home'))
+        return redirect(url_for('posts.home'))
 
     form = LoginForm()
     if form.validate_on_submit():
@@ -39,11 +38,8 @@ def login():
                                                form.password.data):
             login_user(user, remember=form.remember.data)
 
-            return redirect(url_for('main.home'))
-        else:
-            flash('Войти не удалось. Пожалуйста, '
-                  'проверьте электронную почту и пароль', 'внимание')
-        return redirect(url_for('main.home'))
+            return redirect(url_for('posts.home'))
+        return redirect(url_for('posts.home'))
     return render_template('login.html', title='Sign in', form=form)
 
 
@@ -75,7 +71,40 @@ def account():
                            user=user)
 
 
-@users.route("/logout")
+@users.route('/logout')
 def logout():
     logout_user()
-    return redirect(url_for('main.home'))
+    return redirect(url_for('posts.home'))
+
+
+@users.route('/reset_password', methods=['GET', 'POST'])
+def reset_request():
+    if current_user.is_authenticated:
+        return redirect(url_for('posts.allposts'))
+    form = RequestResetForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        send_reset_email(user)
+
+        return redirect(url_for('users.login'))
+    return render_template('reset_request.html',
+                           title='Сброс пароля', form=form)
+
+
+@users.route('/reset_password/<token>', methods=['GET', 'POST'])
+def reset_token(token):
+    if current_user.is_authenticated:
+        return redirect(url_for('posts.allpost'))
+    user = User.verify_reset_token(token)
+    if user is None:
+        flash('Это недействительный или просроченный токен', 'warning')
+        return redirect(url_for('users.reset_request'))
+    form = ResetPasswordForm()
+    if form.validate_on_submit():
+        hashed_password = bcrypt. \
+            generate_password_hash(form.password.data).decode('utf-8')
+        user.password = hashed_password
+        db.session.commit()
+        return redirect(url_for('users.login'))
+    return render_template('reset_password.html',
+                           title='Сброс пароля', form=form)

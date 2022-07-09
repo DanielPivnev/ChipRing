@@ -10,7 +10,7 @@
     <link rel="canonical" href="https://getbootstrap.com/docs/5.2/examples/album/">
     <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}"> -->
 
-    <link href="../static/assets/dist/css/bootstrap.min.css" rel="stylesheet">
+<!--    <link href="../static/assets/dist/css/bootstrap.min.css" rel="stylesheet">-->
 
     <style>
         .bd-placeholder-img {
@@ -63,6 +63,11 @@
             white-space: nowrap;
             -webkit-overflow-scrolling: touch;
         }
+
+        body {
+            height: 100vh;
+            align-items: center;
+        }
     </style>
 
     <title>{{ title }}</title>
@@ -73,66 +78,67 @@
 </head>
 <body>
 
-<header>
-    <div class="collapse bg-dark" id="navbarHeader">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-4 offset-md-1 py-4">
-                    <h4 class="text-white">Contact</h4>
-                    <ul class="list-unstyled">
-                        <li><a href="#" class="text-white">Follow on Twitter</a></li>
-                        <li><a href="#" class="text-white">Like on Facebook</a></li>
-                        <li><a href="#" class="text-white">Email me</a></li>
-                    </ul>
-                </div>
-                <div class="col-sm-4 offset-md-1 py-4">
-                    <ul class="list-unstyled">
-                        {% if current_user.is_authenticated %}
-                            <li><a class="text-white" href="{{ url_for('users.account') }}">Profile</a></li>
-                            <li><a class="text-white" href="{{ url_for('users.logout') }}">Logout</a></li>
-                        {% else %}
-                            <li><a class="text-white" href="{{ url_for('users.login') }}">Login</a></li>
-                            <li><a class="text-white" href="{{ url_for('users.register') }}">Registration</a></li>
-                        {% endif %}
-                    </ul>
+    <header>
+        <div class="collapse bg-dark" id="navbarHeader">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-4 offset-md-1 py-4">
+                        <h4 class="text-white">Contact</h4>
+                        <ul class="list-unstyled">
+                            <li><a href="#" class="text-white">Follow on Twitter</a></li>
+                            <li><a href="#" class="text-white">Like on Facebook</a></li>
+                            <li><a href="#" class="text-white">Email me</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-4 offset-md-1 py-4">
+                        <ul class="list-unstyled">
+                            <li><a class="text-white" href="{{ url_for('posts.home') }}">Home</a></li>
+                            {% if current_user.is_authenticated %}
+                                <li><a class="text-white" href="{{ url_for('users.account') }}">Profile</a></li>
+                                <li><a class="text-white" href="{{ url_for('posts.new_post') }}">New Post</a></li>
+                                <li><a class="text-white" href="{{ url_for('users.logout') }}">Logout</a></li>
+                            {% else %}
+                                <li><a class="text-white" href="{{ url_for('users.login') }}">Login</a></li>
+                                <li><a class="text-white" href="{{ url_for('users.register') }}">Registration</a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="navbar navbar-dark bg-dark shadow-sm">
-        <div class="container">
-            <a href="#" class="navbar-brand d-flex align-items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor"
-                     stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="me-2"
-                     viewBox="0 0 24 24">
-                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
-                    <circle cx="12" cy="13" r="4"/>
-                </svg>
-                <strong>Web Blog</strong>
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader"
-                    aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+        <div class="navbar navbar-dark bg-dark shadow-sm">
+            <div class="container">
+                <a href="#" class="navbar-brand d-flex align-items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor"
+                         stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="me-2"
+                         viewBox="0 0 24 24">
+                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                        <circle cx="12" cy="13" r="4"/>
+                    </svg>
+                    <strong>Web Blog</strong>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader"
+                        aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
         </div>
-    </div>
-</header>
+    </header>
 
-{% block content %}
+    {% block content %}
 
-{% endblock %}
+    {% endblock %}
 
-<footer class="text-muted py-5">
-    <div class="container">
-        <p class="float-end mb-1">
+    <footer class="text-muted bg-dark py-5">
+        <div class="container">
+            <p class="float-end mb-1">
 
-        </p>
-        <p class="mb-1">2022 &copy; Web Blog</p>
-    </div>
-</footer>
+            </p>
+            <p class="mb-1 text-white">2022 &copy; Web Blog</p>
+        </div>
+    </footer>
 
-
-<script src="../static/assets/dist/js/bootstrap.bundle.min.js"></script>
+<!--<script src="../static/assets/dist/js/bootstrap.bundle.min.js"></script>-->
 
 
 </body>

@@ -82,7 +82,7 @@
         </svg>
         {{ form.hidden_tag() }}
 
-        <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+        <h1 class="h3 mb-3 fw-normal">Enter Your Email</h1>
 
             {% if form.email.errors %}
                 {% for error in form.email.errors %}
@@ -93,17 +93,7 @@
             {{ form.email(class='form-control') }}
             {{ form.email.label() }}
         </div>
-            {% if form.password.errors %}
-                {% for error in form.password.errors %}
-                    {{ error }}
-                {% endfor %}
-            {% endif %}
-        <div class="form-floating">
-            {{ form.password(class='form-control') }}
-            {{ form.password.label() }}
-        </div>
         {{ form.submit(class='w-100 btn btn-lg btn-dark') }}
-        <a href="{{ url_for('users.reset_request') }}">Do you forgot your password?</a>
         <p class="mt-5 mb-3 text-muted">&copy; 2022 Web Blog</p>
     </form>
 </main>
