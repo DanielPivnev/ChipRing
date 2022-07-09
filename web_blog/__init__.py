@@ -21,9 +21,11 @@ def create_app():
 
     from web_blog.users.routes import users
     from web_blog.posts.routes import posts
+    from web_blog.errors.handlers import errors
 
     app.register_blueprint(users)
     app.register_blueprint(posts)
+    app.register_blueprint(errors)
 
     app.config.from_object(Config)
 
