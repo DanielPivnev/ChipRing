@@ -78,13 +78,13 @@ def logout():
 @users.route('/reset_password', methods=['GET', 'POST'])
 def reset_request():
     if current_user.is_authenticated:
-        return redirect(url_for('posts.allposts'))
+        return redirect(url_for('posts.home'))
     form = RequestResetForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         send_reset_email(user)
 
-        return redirect(url_for('posts.allposts'))
+        return redirect(url_for('posts.home'))
     return render_template('reset_request.html',
                            title='Сброс пароля', form=form)
 
@@ -92,10 +92,9 @@ def reset_request():
 @users.route('/reset_password/<token>', methods=['GET', 'POST'])
 def reset_token(token):
     if current_user.is_authenticated:
-        return redirect(url_for('posts.allpost'))
+        return redirect(url_for('posts.home'))
     user = User.verify_reset_token(token)
     if user is None:
-        flash('Это недействительный или просроченный токен', 'warning')
         return redirect(url_for('users.reset_request'))
     form = ResetPasswordForm()
     if form.validate_on_submit():
