@@ -63,6 +63,14 @@
             height: 100vh;
             align-items: center;
         }
+
+        .post-pic {
+            object-fit: cover;
+        }
+
+        .link {
+            text-decoration: none;
+        }
     </style>
 
     <title>{{ title }}</title>
@@ -77,24 +85,16 @@
         <div class="collapse bg-dark" id="navbarHeader">
             <div class="container">
                 <div class="row">
-                    <div class="col-sm-4 offset-md-1 py-4">
-                        <h4 class="text-white">Contact</h4>
+                    <div class="col-sm-4 py-4">
                         <ul class="list-unstyled">
-                            <li><a href="#" class="text-white">Follow on Twitter</a></li>
-                            <li><a href="#" class="text-white">Like on Facebook</a></li>
-                            <li><a href="#" class="text-white">Email me</a></li>
-                        </ul>
-                    </div>
-                    <div class="col-sm-4 offset-md-1 py-4">
-                        <ul class="list-unstyled">
-                            <li><a class="text-white" href="{{ url_for('posts.home') }}">Home</a></li>
+                            <li><a class="link text-white" href="{{ url_for('posts.home') }}">Home</a></li>
                             {% if current_user.is_authenticated %}
-                                <li><a class="text-white" href="{{ url_for('users.account') }}">Profile</a></li>
-                                <li><a class="text-white" href="{{ url_for('posts.new_post') }}">New Post</a></li>
-                                <li><a class="text-white" href="{{ url_for('users.logout') }}">Logout</a></li>
+                                <li><a class="link text-white" href="{{ url_for('users.account') }}">Profile</a></li>
+                                <li><a class="link text-white" href="{{ url_for('posts.new_post') }}">New Post</a></li>
+                                <li><a class="link text-white" href="{{ url_for('users.logout') }}">Logout</a></li>
                             {% else %}
-                                <li><a class="text-white" href="{{ url_for('users.login') }}">Login</a></li>
-                                <li><a class="text-white" href="{{ url_for('users.register') }}">Registration</a></li>
+                                <li><a class="link text-white" href="{{ url_for('users.login') }}">Login</a></li>
+                                <li><a class="link text-white" href="{{ url_for('users.register') }}">Registration</a></li>
                             {% endif %}
                         </ul>
                     </div>

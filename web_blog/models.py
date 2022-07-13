@@ -45,6 +45,8 @@ class Post(db.Model):
     content = db.Column(db.Text, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'),
                         nullable=False)
+    image_file = db.Column(db.String(50), nullable=False,
+                           default='default_post.png')
 
     def __repr__(self):
         return f'Запись: {self.title} | {self.date_posted}'

@@ -39,6 +39,18 @@
                     {% endif %}
                 </div>
 
+                <div class="col-sm-12">
+                    {{ form.picture.label(class='form-label') }}
+                    <div class="input-group">
+                        {{ form.picture(class='form-control') }}
+                        {% if form.picture.errors %}
+                            {% for error in form.picture.errors %}
+                                <span class="text-danger">{{ error }}</span></br>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+
 
                 <div class="col-sm-12">
                     <hr class="my-4">

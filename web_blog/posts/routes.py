@@ -5,6 +5,7 @@ from flask_login import current_user, login_required
 from web_blog import db
 from web_blog.models import Post, User
 from web_blog.posts.forms import PostForm
+from web_blog.users.utils import save_picture
 
 posts = Blueprint('posts', __name__)
 
@@ -33,8 +34,13 @@ def user_posts(user_id):
 def new_post():
     form = PostForm()
     if form.validate_on_submit():
-        post = Post(title=form.title.data, content=form.content.data,
-                    user_id=current_user.id)
+        if form.picture.data:
+            picture_file = save_picture(form.picture.data, 'post_pics')
+            post = Post(title=form.title.data, content=form.content.data,
+                        user_id=current_user.id, image_file=picture_file)
+        else:
+            post = Post(title=form.title.data, content=form.content.data,
+                        user_id=current_user.id)
         db.session.add(post)
         db.session.commit()
         return redirect(url_for('posts.home'))
@@ -44,7 +50,7 @@ def new_post():
 @posts.route('/post/<int:post_id>')
 def post(post_id):
     post = Post.query.get_or_404(post_id)
-    author = User.query.get_or_404(post.id)
+    author = User.query.get_or_404(post.user_id)
     return render_template('post.html', title=post.title, post=post, author=author)
 
 
@@ -56,10 +62,13 @@ def update_post(post_id):
         abort(403)
     form = PostForm()
     if form.validate_on_submit():
+        if form.picture.data:
+            picture_file = save_picture(form.picture.data, 'post_pics')
+            post.image_file = picture_file
         post.title = form.title.data
         post.content = form.content.data
         db.session.commit()
-        return redirect(url_for('posts.post', post_id=post.id))
+        return redirect(url_for('posts.home'))
     elif request.method == 'GET':
         form.title.data = post.title
         form.content.data = post.content
