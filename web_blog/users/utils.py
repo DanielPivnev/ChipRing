@@ -21,14 +21,14 @@ def send_reset_email(user):
     mail.send(msg)
 
 
-def save_picture(form_picture, folder):
+def save_picture(form_picture, folder, x_size=150, y_size=150):
     random_hex = token_hex(8)
     _, f_ext = os.path.splitext(form_picture.filename)
     picture_fn = random_hex + f_ext
     picture_path = os.path.join(current_app.root_path,
                                 f'static/{folder}', picture_fn)
 
-    output_size = (150, 150)
+    output_size = (x_size, y_size)
     i = Image.open(form_picture)
     i.thumbnail(output_size)
     i.save(picture_path)

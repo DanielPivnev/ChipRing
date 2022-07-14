@@ -72,7 +72,7 @@ class UpdateAccountForm(FlaskForm):
                         ])
     picture = FileField('Change photo',
                         validators=[
-                            FileAllowed(['jpg', 'png'])
+                            FileAllowed(['jpg', 'jpeg', 'png'])
                         ])
     submit = SubmitField('Save')
 

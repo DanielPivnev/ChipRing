@@ -1,0 +1,74 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="col-lg-12" style="min-height: 90vh; margin-top: 5vh; margin-bottom: 5vh;">
+        <div class="col">
+            <div class="card shadow-sm">
+                <img class="post-pic"
+                     src="{{ url_for('static', filename='post_pics/' + post.image_file) }}"
+                     height="500px">
+
+                <div class="card-body">
+                    <h4 class="h4">{{ post.title }}</h4>
+                    <p class="card-text">
+                        {{ post.content }}
+                    </p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="btn-group">
+                            {% if current_user.is_authenticated and current_user.id == post.user_id %}
+                                <a href="{{ url_for('posts.update_post', post_id=post.id) }}"
+                                   class="btn btn-sm btn-outline-secondary">Edit</a>
+                                <a href="{{ url_for('posts.delete_post', post_id=post.id) }}"
+                                   class="btn btn-sm btn-outline-secondary">Delete</a>
+                            {% endif %}
+                        </div>
+                        <small class="text-muted">{{ post.date_posted.strftime('%d %B %Y') }} | {{ author.username }}</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if current_user.is_authenticated %}
+            <div class="col" style="margin-top: 5vh;">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Comments</h5>
+                        <form class="needs-validation" method="POST" action="" enctype="multipart/form-data">
+                            {{ form.hidden_tag() }}
+                            <div class="row g-3">
+                                <div class="col-sm-12">
+                                    {% if form.content.errors %}
+                                        {{ form.content(class='form-control') }}
+                                        {% for error in form.content.errors %}
+                                            {{ form.content(class='form-control') }}
+                                            <div class="invalid-feedback">
+                                                {{ error }}
+                                            </div>
+                                        {% endfor %}
+                                    {% else %}
+                                        {{ form.content(class='form-control') }}
+                                    {% endif %}
+                                </div>
+                                <div class="col-sm-12 justify-content-end d-flex">
+                                    {{ form.submit(class='btn btn-dark btn-lg') }}
+                                </div>
+                            </div>
+                        </form>
+
+                        {% for comment in comments %}
+                            <hr class="my-4">
+
+                            <div class="col-sm-12 d-flex justify-content-between">
+                                {{ comment.content }}
+                                <small class="text-muted">
+                                    {{ comment.created_at.strftime('%d %B %Y') }} | {{ comment.author.author.username }}
+                                </small>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

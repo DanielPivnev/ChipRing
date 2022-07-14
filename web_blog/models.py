@@ -34,7 +34,7 @@ class User(db.Model, UserMixin):
         return User.query.get(user_id)
 
     def __repr__(self):
-        return f'Пользователь: {self.username} | {self.email}'
+        return f'User: {self.username} | {self.email}'
 
 
 class Post(db.Model):
@@ -47,6 +47,21 @@ class Post(db.Model):
                         nullable=False)
     image_file = db.Column(db.String(50), nullable=False,
                            default='default_post.png')
+    posts = db.relationship('Comment', backref='author', lazy=True)
 
     def __repr__(self):
-        return f'Запись: {self.title} | {self.date_posted}'
+        return f'Post: {self.title} | {self.date_posted}'
+
+
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    created_at = db.Column(db.DateTime, nullable=False,
+                           default=datetime.utcnow)
+    content = db.Column(db.Text, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'),
+                        nullable=False)
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'),
+                        nullable=False)
+
+    def __repr__(self):
+        return f'Comment: {self.post_id} | {self.user_id}'

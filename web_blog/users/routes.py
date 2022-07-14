@@ -9,7 +9,7 @@ from web_blog.users.utils import save_picture, send_reset_email
 users = Blueprint('users', __name__)
 
 
-@users.route('/registration', methods=['GET', 'POST'])
+@users.route('/registration/', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
         return redirect(url_for('posts.home'))
@@ -23,10 +23,10 @@ def register():
         db.session.commit()
 
         return redirect(url_for('users.login'))
-    return render_template('registration.html', title='Registration', form=form)
+    return render_template('users/registration.html', title='Registration', form=form)
 
 
-@users.route('/login', methods=['GET', 'POST'])
+@users.route('/login/', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('posts.home'))
@@ -40,10 +40,10 @@ def login():
 
             return redirect(url_for('posts.home'))
         return redirect(url_for('posts.home'))
-    return render_template('login.html', title='Sign in', form=form)
+    return render_template('users/login.html', title='Sign in', form=form)
 
 
-@users.route('/account', methods=['GET', 'POST'])
+@users.route('/account/', methods=['GET', 'POST'])
 @login_required
 def account():
     form = UpdateAccountForm()
@@ -64,18 +64,18 @@ def account():
             .order_by(Post.date_posted.desc())
     image_file = url_for('static', filename='profile_pics/' +
                                             current_user.image_file)
-    return render_template('profile.html', title='Profile',
+    return render_template('users/profile.html', title='Profile',
                            image_file=image_file, form=form, posts=posts,
                            user=user)
 
 
-@users.route('/logout')
+@users.route('/logout/')
 def logout():
     logout_user()
     return redirect(url_for('posts.home'))
 
 
-@users.route('/reset_password', methods=['GET', 'POST'])
+@users.route('/reset_password/', methods=['GET', 'POST'])
 def reset_request():
     if current_user.is_authenticated:
         return redirect(url_for('posts.home'))
@@ -85,11 +85,11 @@ def reset_request():
         send_reset_email(user)
 
         return redirect(url_for('posts.home'))
-    return render_template('reset_request.html',
+    return render_template('users/reset_request.html',
                            title='Сброс пароля', form=form)
 
 
-@users.route('/reset_password/<token>', methods=['GET', 'POST'])
+@users.route('/reset_password/<token>/', methods=['GET', 'POST'])
 def reset_token(token):
     if current_user.is_authenticated:
         return redirect(url_for('posts.home'))
@@ -103,5 +103,5 @@ def reset_token(token):
         user.password = hashed_password
         db.session.commit()
         return redirect(url_for('users.login'))
-    return render_template('reset_password.html',
+    return render_template('users/reset_password.html',
                            title='Сброс пароля', form=form)
