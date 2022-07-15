@@ -18,7 +18,8 @@ class User(db.Model, UserMixin):
     image_file = db.Column(db.String(50), nullable=False,
                            default='default.png')
     password = db.Column(db.String(60), nullable=False)
-    posts = db.relationship('Post', backref='author', lazy=True)
+    posts = db.relationship('Post', backref='author', lazy=True, cascade='all, delete')
+    comments = db.relationship('Comment', backref='author', lazy=True, cascade='all, delete')
 
     def get_reset_token(self, expires_sec=1800):
         s = Serializer(current_app.config['SECRET_KEY'], expires_sec)
@@ -47,7 +48,9 @@ class Post(db.Model):
                         nullable=False)
     image_file = db.Column(db.String(50), nullable=False,
                            default='default_post.png')
-    posts = db.relationship('Comment', backref='author', lazy=True)
+    comments = db.relationship('Comment', backref='post', lazy=True, cascade='all, delete')
+    likes = db.relationship('Like', backref='post', lazy=True, cascade='all, delete')
+    dislikes = db.relationship('Dislike', backref='post', lazy=True, cascade='all, delete')
 
     def __repr__(self):
         return f'Post: {self.title} | {self.date_posted}'
@@ -63,5 +66,24 @@ class Comment(db.Model):
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'),
                         nullable=False)
 
+
+class Like(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'),
+                        nullable=False)
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'),
+                        nullable=False)
+
     def __repr__(self):
-        return f'Comment: {self.post_id} | {self.user_id}'
+        return f'Like: {self.post_id} | {self.user_id}'
+
+
+class Dislike(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'),
+                        nullable=False)
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'),
+                        nullable=False)
+
+    def __repr__(self):
+        return f'Dislike: {self.post_id} | {self.user_id}'

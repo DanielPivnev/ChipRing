@@ -3,7 +3,7 @@ from flask import (render_template, url_for,
 from flask_login import current_user, login_required
 
 from web_blog import db
-from web_blog.models import Post, User, Comment
+from web_blog.models import Post, User, Comment, Like, Dislike
 from web_blog.posts.forms import PostForm, CommentForm, UsernameSearchForm
 from web_blog.users.utils import save_picture
 
@@ -69,29 +69,34 @@ def new_post():
 
 @posts.route('/post/<int:post_id>/', methods=['GET', 'POST'])
 def post(post_id):
-    post = Post.query.get_or_404(post_id)
-    author = User.query.get_or_404(post.user_id)
     context = {}
 
     if current_user.is_authenticated:
-        comments = Comment.query.filter_by(post_id=post.id).order_by(Comment.created_at.desc()).all()
 
         form = CommentForm()
         if form.validate_on_submit():
             comment = Comment(content=form.content.data,
                               user_id=current_user.id,
-                              post_id=post.id)
+                              post_id=post_id)
             db.session.add(comment)
             db.session.commit()
 
-            return redirect(url_for('posts.post', post_id=post.id))
+            return redirect(url_for('posts.post', post_id=post_id))
 
-        context['comments'] = comments
         context['form'] = form
 
+    post = Post.query.get_or_404(post_id)
+    liked = Like.query.filter_by(post_id=post_id, user_id=current_user.id).first()
+    disliked = Dislike.query.filter_by(post_id=post_id, user_id=current_user.id).first()
+
     context['post'] = post
-    context['author'] = author
+    context['comments'] = Comment.query.filter_by(post_id=post_id).order_by(Comment.created_at.desc()).all()
+    context['author'] = User.query.get_or_404(post.user_id)
     context['title'] = post.title
+    context['likes'] = Like.query.filter_by(post_id=post_id)
+    context['dislikes'] = Dislike.query.filter_by(post_id=post_id)
+    context['liked'] = True if liked else False
+    context['disliked'] = True if disliked else False
 
     return render_template('posts/post.html', **context)
 
@@ -125,4 +130,52 @@ def delete_post(post_id):
         abort(403)
     db.session.delete(post)
     db.session.commit()
+
     return redirect(url_for('posts.home'))
+
+
+@posts.route('/like_post/<int:post_id>/', )
+@login_required
+def like_post(post_id):
+    like = Like.query.filter_by(post_id=post_id, user_id=current_user.id).first()
+    dislike = Dislike.query.filter_by(post_id=post_id, user_id=current_user.id).first()
+
+    if like:
+        db.session.delete(like)
+        db.session.commit()
+
+        return redirect(url_for('posts.post', post_id=post_id))
+
+    if dislike:
+        db.session.delete(dislike)
+        db.session.commit()
+
+    like = Like(post_id=post_id, user_id=current_user.id)
+    db.session.add(like)
+    db.session.commit()
+
+    return redirect(url_for('posts.post', post_id=post_id))
+
+
+@posts.route('/dislike_post/<int:post_id>/', )
+@login_required
+def dislike_post(post_id):
+    dislike = Dislike.query.filter_by(post_id=post_id, user_id=current_user.id).first()
+    like = Like.query.filter_by(post_id=post_id, user_id=current_user.id).first()
+
+    if dislike:
+        db.session.delete(dislike)
+        db.session.commit()
+
+        return redirect(url_for('posts.post', post_id=post_id))
+
+    if like:
+        db.session.delete(like)
+        db.session.commit()
+
+    dislike = Dislike(post_id=post_id, user_id=current_user.id)
+    db.session.add(dislike)
+    db.session.commit()
+
+    return redirect(url_for('posts.post', post_id=post_id))
+

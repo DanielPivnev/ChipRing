@@ -15,24 +15,34 @@
                         {{ post.content }}
                     </p>
                     <div class="d-flex justify-content-between align-items-center">
-                        <div class="btn-group">
-                            {% if current_user.is_authenticated and current_user.id == post.user_id %}
-                                <a href="{{ url_for('posts.update_post', post_id=post.id) }}"
-                                   class="btn btn-sm btn-outline-secondary">Edit</a>
-                                <a href="{{ url_for('posts.delete_post', post_id=post.id) }}"
-                                   class="btn btn-sm btn-outline-secondary">Delete</a>
-                            {% endif %}
+                        <div class="d-flex align-items-center">
+                            <div class="btn-group">
+                                {% if current_user.is_authenticated and current_user.id == post.user_id %}
+                                    <a href="{{ url_for('posts.update_post', post_id=post.id) }}"
+                                       class="btn btn-sm btn-outline-secondary">Edit</a>
+                                    <a href="{{ url_for('posts.delete_post', post_id=post.id) }}"
+                                       class="btn btn-sm btn-outline-secondary">Delete</a>
+                                {% endif %}
+                            </div>
+                            <a href="{{ url_for('posts.like_post', post_id=post.id) }}"
+                               class="like-dislike {% if liked %}liked{% endif %}">
+                                <i class="fa fa-thumbs-up"> {{ likes.count() }}</i>
+                            </a>
+                            <a href="{{ url_for('posts.dislike_post', post_id=post.id) }}"
+                               class="like-dislike {% if disliked %}disliked{% endif %}">
+                                <i class="fa fa-thumbs-down"> {{ dislikes.count() }}</i>
+                            </a>
                         </div>
                         <small class="text-muted">{{ post.date_posted.strftime('%d %B %Y') }} | {{ author.username }}</small>
                     </div>
                 </div>
             </div>
         </div>
-        {% if current_user.is_authenticated %}
-            <div class="col" style="margin-top: 5vh;">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Comments</h5>
+        <div class="col" style="margin-top: 5vh;">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Comments</h5>
+                    {% if current_user.is_authenticated %}
                         <form class="needs-validation" method="POST" action="" enctype="multipart/form-data">
                             {{ form.hidden_tag() }}
                             <div class="row g-3">
@@ -54,21 +64,21 @@
                                 </div>
                             </div>
                         </form>
+                    {% endif %}
 
-                        {% for comment in comments %}
-                            <hr class="my-4">
+                    {% for comment in comments %}
+                        <hr class="my-4">
 
-                            <div class="col-sm-12 d-flex justify-content-between">
-                                {{ comment.content }}
-                                <small class="text-muted">
-                                    {{ comment.created_at.strftime('%d %B %Y') }} | {{ comment.author.author.username }}
-                                </small>
-                            </div>
-                        {% endfor %}
-                    </div>
+                        <div class="col-sm-12 d-flex justify-content-between">
+                            {{ comment.content }}
+                            <small class="text-muted">
+                                {{ comment.created_at.strftime('%d %B %Y') }} | {{ comment.author.username }}
+                            </small>
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
-        {% endif %}
+        </div>
     </div>
 </div>
 {% endblock %}

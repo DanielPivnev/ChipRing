@@ -6,8 +6,25 @@
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.2/examples/album/">
     <link href="{{ url_for('static', filename='assets/dist/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='font-awesome-4.7.0/css/font-awesome.min.css') }}" rel="stylesheet">
 
     <style>
+        .like-dislike {
+            padding: 4px 10px;
+            border-radius: 5px;
+            background-color: #9a9a9a;
+            margin-left: 10px;
+            cursor: pointer;
+            color: #ffffff;
+        }
+
+
+        .like-dislike:hover,
+        .liked,
+        .disliked {
+            color: #000000;
+        }
+
         .bd-placeholder-img {
             font-size: 1.125rem;
             text-anchor: middle;
