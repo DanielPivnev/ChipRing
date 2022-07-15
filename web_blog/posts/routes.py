@@ -86,8 +86,12 @@ def post(post_id):
         context['form'] = form
 
     post = Post.query.get_or_404(post_id)
-    liked = Like.query.filter_by(post_id=post_id, user_id=current_user.id).first()
-    disliked = Dislike.query.filter_by(post_id=post_id, user_id=current_user.id).first()
+    if current_user.is_authenticated:
+        liked = Like.query.filter_by(post_id=post_id, user_id=current_user.id).first()
+        disliked = Dislike.query.filter_by(post_id=post_id, user_id=current_user.id).first()
+
+        context['liked'] = True if liked else False
+        context['disliked'] = True if disliked else False
 
     context['post'] = post
     context['comments'] = Comment.query.filter_by(post_id=post_id).order_by(Comment.created_at.desc()).all()
@@ -95,8 +99,6 @@ def post(post_id):
     context['title'] = post.title
     context['likes'] = Like.query.filter_by(post_id=post_id)
     context['dislikes'] = Dislike.query.filter_by(post_id=post_id)
-    context['liked'] = True if liked else False
-    context['disliked'] = True if disliked else False
 
     return render_template('posts/post.html', **context)
 
