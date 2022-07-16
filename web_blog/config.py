@@ -8,4 +8,3 @@ class Config:
     MAIL_USE_SSL = True
     MAIL_USERNAME = 'danpivnev@yandex.ru'
     MAIL_PASSWORD = 'nmlzkravcbrjdtur'
-

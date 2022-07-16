@@ -18,6 +18,7 @@ class User(db.Model, UserMixin):
     image_file = db.Column(db.String(50), nullable=False,
                            default='default.png')
     password = db.Column(db.String(60), nullable=False)
+    role = db.Column(db.String(10), default='blogger', nullable=False)
     posts = db.relationship('Post', backref='author', lazy=True, cascade='all, delete')
     comments = db.relationship('Comment', backref='author', lazy=True, cascade='all, delete')
 
